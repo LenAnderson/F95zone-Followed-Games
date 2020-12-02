@@ -1,3 +1,4 @@
+${include: strtotime.js}
 class Game {
 	constructor({url}) {
 		this.url = url;
@@ -21,8 +22,8 @@ class Game {
 		const post = html.querySelector('.message-threadStarterPost .message-cell.message-cell--main .message-content .message-body .bbWrapper');
 		
 		this.title = html.querySelector('.p-title-value').textContent;
-		this.threadDate = post.textContent.replace(/^.+Thread\s+Updated\s*:\s*(\d\d\d\d.+?\d\d.+?\d\d).+$/s, '$1');
-		this.gameDate = post.textContent.replace(/^.+Release\s+Date\s*:\s*(\d\d\d\d.+?\d\d.+?\d\d).+$/s, '$1');
+		this.threadDate = new Date(strtotime(post.textContent.replace(/^.+(Thread|Post)\s+Updated\s*:\s*([^\r\n]+)[\r\n].+$/s, '$2'))*1000);
+		this.gameDate = new Date(strtotime(post.textContent.replace(/^.+(Release\s+Date|Game\s+Updated)\s*:\s*([^\r\n]+)[\r\n].+$/s, '$2'))*1000);
 		this.version = post.textContent.replace(/^.+Version\s*:\s*([^\r\n]+).+$/s, '$1');
 		
 		const changelogHeader = Array.from(post.querySelectorAll('b')).find(it=>it.textContent == 'Changelog' || it.textContent == 'Change-logs');

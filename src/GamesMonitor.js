@@ -115,7 +115,7 @@ class GamesMonitor {
 							threadDate.appendChild(dt);
 						}
 						const dd = document.createElement('dd'); {
-							dd.textContent = game.threadDate;
+							dd.textContent = `${game.threadDate.getFullYear()}-${game.threadDate.getMonth()<9?'0':''}${game.threadDate.getMonth()+1}-${game.threadDate.getDate()<10?'0':''}${game.threadDate.getDate()}`;
 							threadDate.appendChild(dd);
 						}
 						meta.appendChild(threadDate);
@@ -128,7 +128,7 @@ class GamesMonitor {
 							gameDate.appendChild(dt);
 						}
 						const dd = document.createElement('dd'); {
-							dd.textContent = game.gameDate;
+							dd.textContent = `${game.gameDate.getFullYear()}-${game.gameDate.getMonth()<9?'0':''}${game.gameDate.getMonth()+1}-${game.gameDate.getDate()<10?'0':''}${game.gameDate.getDate()}`;
 							gameDate.appendChild(dd);
 						}
 						meta.appendChild(gameDate);
