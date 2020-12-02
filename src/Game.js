@@ -1,15 +1,27 @@
 ${include: strtotime.js}
 class Game {
-	constructor({url}) {
+	constructor({url, played}) {
 		this.url = url;
 		this.title = null;
-		this.played = null;
+		this.played = played;
 		this.version = null;
 		this.downloads = [];
 		this.changelog = [];
 		this.banner = null;
 		this.threadDate = null;
 		this.gameDate = null;
+	}
+
+
+
+
+	save() {
+		const gg = JSON.parse(localStorage.getItem('ffg-games') || '[]').filter(it=>it.url!=this.url);
+		gg.push({
+			url: this.url,
+			played: this.played
+		});
+		localStorage.setItem('ffg-games', JSON.stringify(gg));
 	}
 
 

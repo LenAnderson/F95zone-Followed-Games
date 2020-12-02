@@ -6,6 +6,7 @@ class GamesMonitor {
 
 		this.filterBar = null;
 		this.itemContainer = null;
+		this.playedVersion = {};
 
 		this.buildGui();
 		this.x();
@@ -58,6 +59,9 @@ class GamesMonitor {
 			const item = document.createElement('div'); {
 				item.classList.add('structItem');
 				item.style.display = 'table-row';
+				if (game.played == game.version) {
+					item.style.opacity = '0.5';
+				}
 				const main = document.createElement('div'); {
 					main.classList.add('structItem-cell');
 					main.classList.add('structItem-cell--main');
@@ -72,7 +76,27 @@ class GamesMonitor {
 							link.style.marginLeft = '10px';
 							title.appendChild(link);
 						}
-						title.appendChild(game.changelog);
+						const played = document.createElement('button'); {
+							played.classList.add('bbCodeSpoiler-button');
+							played.classList.add('button');
+							played.addEventListener('click', evt=>{
+								this.playedVersion[game.url].textContent = game.version;
+								game.played = game.version;
+								item.style.opacity = '0.5';
+								game.save();
+							});
+							const span = document.createElement('span'); {
+								span.classList.add('button-text');
+								span.textContent = 'Played this version';
+								played.appendChild(span);
+							}
+						}
+						if (game.changelog) {
+							title.appendChild(game.changelog);
+							game.changelog.insertBefore(played, game.changelog.children[0]);
+						} else {
+							title.appendChild(played);
+						}
 						main.appendChild(title);
 					}
 					item.appendChild(main);
@@ -102,7 +126,10 @@ class GamesMonitor {
 							latestPlayed.appendChild(dt);
 						}
 						const dd = document.createElement('dd'); {
-							dd.textContent = game.latestPlayed;
+							this.playedVersion[game.url] = dd;
+							if (game.played) {
+								dd.textContent = game.played;
+							}
 							latestPlayed.appendChild(dd);
 						}
 						meta.appendChild(latestPlayed);
