@@ -26,7 +26,7 @@ class Game {
 		this.gameDate = new Date(strtotime(post.textContent.replace(/^.+(Release\s+Date|Game\s+Updated)\s*:\s*([^\r\n]+)[\r\n].+$/s, '$2'))*1000);
 		this.version = post.textContent.replace(/^.+Version\s*:\s*([^\r\n]+).+$/s, '$1');
 		
-		const changelogHeader = Array.from(post.querySelectorAll('b')).find(it=>it.textContent == 'Changelog' || it.textContent == 'Change-logs');
+		const changelogHeader = Array.from(post.querySelectorAll('b')).find(it=>it.textContent == 'Changelog' || it.textContent == 'Change-logs' || it.textContent == 'Change-Log');
 		let changelogSpoiler = changelogHeader;
 		while (changelogSpoiler && !changelogSpoiler.classList.contains('bbCodeSpoiler')) {
 			changelogSpoiler = changelogSpoiler.nextElementSibling;
