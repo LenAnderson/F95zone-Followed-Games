@@ -4,8 +4,7 @@
 // @downloadURL  https://github.com/LenAnderson/F95zone-Followed-Games/raw/master/F95zone-Followed-Games.user.js
 // @version      1.1.0
 // @author       LenAnderson
-// @match        https://f95zone.to/followed-games
-// @match        https://f95zone.to/threads/*
+// @match        https://f95zone.to/*
 // @grant        none
 // ==/UserScript==
 
@@ -47,7 +46,13 @@
 
 
 	${include: GamesMonitor.js}
+	const navLink = $('[data-nav-id="ThePornDude"]'); {
+		navLink.href = '/followed-games';
+		navLink.target = '';
+		navLink.querySelector('span').textContent = 'Followed Games';
+	}
 	if (location.href == 'https://f95zone.to/followed-games') {
+		navLink.closest('.rippleButton').classList.add('is-selected');
 		const app = new GamesMonitor();
 	} else if (location.href.search(/(https:\/\/f95zone.to\/threads\/)[^\/]+(\.\d+\/)/) == 0) {
 		log('add btn');
