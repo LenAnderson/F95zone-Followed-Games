@@ -34,7 +34,7 @@ class Game {
 		const post = html.querySelector('.message-threadStarterPost .message-cell.message-cell--main .message-content .message-body .bbWrapper');
 		
 		this.title = html.querySelector('.p-title-value').textContent;
-		this.threadDate = new Date(strtotime(post.textContent.replace(/^.+(Thread|Post)\s+Updated\s*:\s*([^\r\n]+)[\r\n].+$/s, '$2'))*1000);
+		this.threadDate = new Date(strtotime(post.textContent.replace(/^.+(Thread|Post)\s+Updated?\s*:\s*([^\r\n]+)[\r\n].+$/s, '$2'))*1000);
 		this.gameDate = new Date(strtotime(post.textContent.replace(/^.+(Release\s+Date|Game\s+Updated)\s*:\s*([^\r\n]+)[\r\n].+$/s, '$2'))*1000);
 		this.version = post.textContent.replace(/^.+Version\s*:\s*([^\r\n]+).+$/s, '$1');
 		
