@@ -6,7 +6,7 @@ class Game {
 		this.played = played;
 		this.version = null;
 		this.downloads = [];
-		this.changelog = [];
+		this.changelog = null;
 		this.banner = null;
 		this.threadDate = null;
 		this.gameDate = null;
