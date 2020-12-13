@@ -2,7 +2,7 @@
 // @name         F95zone - Followed Games
 // @namespace    https://github.com/LenAnderson/
 // @downloadURL  https://github.com/LenAnderson/F95zone-Followed-Games/raw/master/F95zone-Followed-Games.user.js
-// @version      1.3.0
+// @version      1.3.1
 // @author       LenAnderson
 // @match        https://f95zone.to/*
 // @grant        none
