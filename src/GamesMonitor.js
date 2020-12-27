@@ -50,6 +50,8 @@ class GamesMonitor {
 	async x() {
 		await Promise.all(this.games.map(it=>it.load()));
 		this.games.sort((a,b)=>{
+			if (!a.isNew && b.isNew) return 1;
+			if (a.isNew && !b.isNew) return -1;
 			if (a.threadDate < b.threadDate) return 1;
 			if (a.threadDate > b.threadDate) return -1;
 			return 0;
@@ -59,7 +61,7 @@ class GamesMonitor {
 			const item = document.createElement('div'); {
 				item.classList.add('structItem');
 				item.style.display = 'table-row';
-				if (game.played == game.version) {
+				if (!game.isNew) {
 					item.style.opacity = '0.5';
 				}
 				const main = document.createElement('div'); {

@@ -15,6 +15,13 @@ class Game {
 
 
 
+	get isNew() {
+		return this.played != this.version;
+	}
+
+
+
+
 	save() {
 		const gg = JSON.parse(localStorage.getItem('ffg-games') || '[]').filter(it=>it.url!=this.url);
 		gg.push({
