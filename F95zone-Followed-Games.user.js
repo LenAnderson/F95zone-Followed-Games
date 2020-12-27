@@ -2,7 +2,7 @@
 // @name         F95zone - Followed Games
 // @namespace    https://github.com/LenAnderson/
 // @downloadURL  https://github.com/LenAnderson/F95zone-Followed-Games/raw/master/F95zone-Followed-Games.user.js
-// @version      1.3.2
+// @version      1.4.0
 // @author       LenAnderson
 // @match        https://f95zone.to/*
 // @grant        none
@@ -1254,6 +1254,13 @@ class Game {
 
 
 
+	get isNew() {
+		return this.played != this.version;
+	}
+
+
+
+
 	save() {
 		const gg = JSON.parse(localStorage.getItem('ffg-games') || '[]').filter(it=>it.url!=this.url);
 		gg.push({
@@ -1277,7 +1284,7 @@ class Game {
 		this.gameDate = new Date(strtotime(post.textContent.replace(/^.+(Release\s+Date|Game\s+Updated)\s*:\s*([^\r\n]+)[\r\n].+$/s, '$2'))*1000);
 		this.version = post.textContent.replace(/^.+?Version\s*:\s*([^\r\n]+).+$/s, '$1');
 		
-		const changelogHeader = Array.from(post.querySelectorAll('b')).find(it=>it.textContent == 'Changelog' || it.textContent == 'Change-logs' || it.textContent == 'Change-Log');
+		const changelogHeader = Array.from(post.querySelectorAll('b')).find(it=>it.textContent == 'Changelog' || it.textContent == 'Change-logs' || it.textContent == 'Change-Log' || it.textContent == 'Changelog history');
 		let changelogSpoiler = changelogHeader;
 		while (changelogSpoiler && !changelogSpoiler.classList.contains('bbCodeSpoiler')) {
 			changelogSpoiler = changelogSpoiler.nextElementSibling;
@@ -1308,9 +1315,9 @@ class Game {
 			if (!afterDl && b.tagName == 'B' && b.textContent.trim().search(/\s*DOWNLOAD\s*/s) == 0) {
 				afterDl = true;
 			} else if (afterDl) {
-				if (b.tagName == 'B' && b.textContent.trim().search(/^((Win|PC)?\/?(Linux)?\/?(Mac)?\/?(Android)?)$/i) == 0) {
-					os = b.textContent.trim().replace(/^((Win|PC)?\/?(Linux)?\/?(Mac)?\/?(Android)?)$/i, '$1');
-					if (os.split('/').map(x=>oss.filter(it=>it.toLowerCase()==x.toLowerCase()).length).filter(it=>it).length) {
+				if (b.tagName == 'B' && b.textContent.trim().search(/^((Win|PC)?\s*(?:\/|-)?\s*(Lin(?:ux)?)?\s*(?:\/|-)?\s*(Mac)?\s*(?:\/|-)?\s*(Android)?)$/i) == 0) {
+					os = b.textContent.trim().replace(/^((Win|PC)?\s*(?:\/|-)?\s*(Lin(?:ux)?)?\s*(?:\/|-)?\s*(Mac)?\s*(?:\/|-)?\s*(Android)?)$/i, '$1');
+					if (os.split(/\/|-/).map(x=>oss.filter(it=>it.toLowerCase()==x.trim().toLowerCase()).length).filter(it=>it).length) {
 						dls = [];
 						this.downloads.push({
 							os: os,
@@ -1387,6 +1394,8 @@ class GamesMonitor {
 	async x() {
 		await Promise.all(this.games.map(it=>it.load()));
 		this.games.sort((a,b)=>{
+			if (!a.isNew && b.isNew) return 1;
+			if (a.isNew && !b.isNew) return -1;
 			if (a.threadDate < b.threadDate) return 1;
 			if (a.threadDate > b.threadDate) return -1;
 			return 0;
@@ -1396,7 +1405,7 @@ class GamesMonitor {
 			const item = document.createElement('div'); {
 				item.classList.add('structItem');
 				item.style.display = 'table-row';
-				if (game.played == game.version) {
+				if (!game.isNew) {
 					item.style.opacity = '0.5';
 				}
 				const main = document.createElement('div'); {
