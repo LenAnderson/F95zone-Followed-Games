@@ -1,5 +1,6 @@
-${include: strtotime.js}
-class Game {
+import { strtotime } from "./strtotime.js";
+
+export class Game {
 	constructor({url, played}) {
 		this.url = url;
 		this.title = null;
@@ -39,6 +40,9 @@ class Game {
 
 		const html = await getHtml(this.url);
 		const post = html.querySelector('.message-threadStarterPost .message-cell.message-cell--main .message-content .message-body .bbWrapper');
+		if (!post) {
+			log('!!! NO POST', this.url, html);
+		}
 		
 		this.title = html.querySelector('.p-title-value').textContent;
 		this.threadDate = new Date(strtotime(post.textContent.replace(/^.+(Thread|Post)\s+Updated?\s*:\s*([^\r\n]+)[\r\n].+$/s, '$2'))*1000);

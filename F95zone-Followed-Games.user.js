@@ -2,11 +2,13 @@
 // @name         F95zone - Followed Games
 // @namespace    https://github.com/LenAnderson/
 // @downloadURL  https://github.com/LenAnderson/F95zone-Followed-Games/raw/master/F95zone-Followed-Games.user.js
-// @version      1.5.0
+// @version      1.6.0
 // @author       LenAnderson
 // @match        https://f95zone.to/*
 // @grant        none
 // ==/UserScript==
+
+
 
 (()=>{
 	'use strict';
@@ -42,10 +44,12 @@
 
 	const wait = async(millis)=>new Promise(resolve=>setTimeout(resolve, millis));
 
+// ---------------- IMPORTS  ----------------
 
 
 
-	const reSpace = '[ \\t]+'
+// src\strtotime.js
+const reSpace = '[ \\t]+'
 const reSpaceOpt = '[ \\t]*'
 const reMeridian = '(?:([ap])\\.?m\\.?([\\t ]|$))'
 const reHour24 = '(2[0-4]|[01]?[0-9])'
@@ -1238,6 +1242,11 @@ function strtotime (str, now) {
   }
   return Math.floor(result.toDate(new Date(now * 1000)) / 1000)
 }
+
+
+// src\Game.js
+
+
 class Game {
 	constructor({url, played}) {
 		this.url = url;
@@ -1278,6 +1287,9 @@ class Game {
 
 		const html = await getHtml(this.url);
 		const post = html.querySelector('.message-threadStarterPost .message-cell.message-cell--main .message-content .message-body .bbWrapper');
+		if (!post) {
+			log('!!! NO POST', this.url, html);
+		}
 		
 		this.title = html.querySelector('.p-title-value').textContent;
 		this.threadDate = new Date(strtotime(post.textContent.replace(/^.+(Thread|Post)\s+Updated?\s*:\s*([^\r\n]+)[\r\n].+$/s, '$2'))*1000);
@@ -1343,6 +1355,11 @@ class Game {
 		log(this.threadDate, this.gameDate, this.version, changelogSpoiler, this.downloads);
 	}
 }
+
+
+// src\GamesMonitor.js
+
+
 class GamesMonitor {
 	constructor() {
 		const g = JSON.parse(localStorage.getItem('ffg-games') || '[]');
@@ -1532,20 +1549,27 @@ class GamesMonitor {
 		});
 	}
 }
+// ---------------- /IMPORTS ----------------
+
+
+
+
+
 	const navLink = $('[data-nav-id="ThePornDude"]'); {
 		navLink.href = '/followed-games';
 		navLink.target = '';
 		navLink.querySelector('span').textContent = 'Followed Games';
 	}
+	['Nutaku', 'LiveSexCams', 'LiveCamGirls'].forEach(it=>$(`[data-nav-id="${it}"]`).closest('li').remove());
 	if (location.href == 'https://f95zone.to/followed-games') {
-		navLink.closest('.rippleButton').classList.add('is-selected');
+		navLink.closest('.p-navEl').classList.add('is-selected');
 		const app = new GamesMonitor();
 	} else if (location.href.search(/(https:\/\/f95zone.to\/threads\/)[^\/]+(\.\d+\/)/) == 0) {
 		log('add btn');
 		const watch = $('.rippleButton[data-sk-watch]');
 		if (watch) {
 			log('yup');
-			const url = location.href.replace(/(https:\/\/f95zone.to\/threads\/)[^\/]+(\.\d+\/)/, '$1$2');
+			const url = location.href.replace(/(https:\/\/f95zone.to\/threads\/)[^\/]+(\.\d+\/).*$/, '$1$2');
 			let games = JSON.parse(localStorage.getItem('ffg-games') || '[]');
 			let followed = false;
 			if (games.filter(it=>it.url==url).length) {

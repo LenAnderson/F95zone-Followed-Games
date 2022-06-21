@@ -1,5 +1,6 @@
-${include: Game.js}
-class GamesMonitor {
+import { Game } from "./Game.js";
+
+export class GamesMonitor {
 	constructor() {
 		const g = JSON.parse(localStorage.getItem('ffg-games') || '[]');
 		this.games = g.map(it=>new Game(it));

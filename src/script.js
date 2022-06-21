@@ -2,11 +2,13 @@
 // @name         F95zone - Followed Games
 // @namespace    https://github.com/LenAnderson/
 // @downloadURL  https://github.com/LenAnderson/F95zone-Followed-Games/raw/master/F95zone-Followed-Games.user.js
-// @version      1.5.0
+// @version      1.6.0
 // @author       LenAnderson
 // @match        https://f95zone.to/*
 // @grant        none
 // ==/UserScript==
+
+import { GamesMonitor } from "./GamesMonitor.js";
 
 (()=>{
 	'use strict';
@@ -45,21 +47,26 @@
 
 
 
-	${include: GamesMonitor.js}
+	// ${imports}
+
+
+
+
 	const navLink = $('[data-nav-id="ThePornDude"]'); {
 		navLink.href = '/followed-games';
 		navLink.target = '';
 		navLink.querySelector('span').textContent = 'Followed Games';
 	}
+	['Nutaku', 'LiveSexCams', 'LiveCamGirls'].forEach(it=>$(`[data-nav-id="${it}"]`).closest('li').remove());
 	if (location.href == 'https://f95zone.to/followed-games') {
-		navLink.closest('.rippleButton').classList.add('is-selected');
+		navLink.closest('.p-navEl').classList.add('is-selected');
 		const app = new GamesMonitor();
 	} else if (location.href.search(/(https:\/\/f95zone.to\/threads\/)[^\/]+(\.\d+\/)/) == 0) {
 		log('add btn');
 		const watch = $('.rippleButton[data-sk-watch]');
 		if (watch) {
 			log('yup');
-			const url = location.href.replace(/(https:\/\/f95zone.to\/threads\/)[^\/]+(\.\d+\/)/, '$1$2');
+			const url = location.href.replace(/(https:\/\/f95zone.to\/threads\/)[^\/]+(\.\d+\/).*$/, '$1$2');
 			let games = JSON.parse(localStorage.getItem('ffg-games') || '[]');
 			let followed = false;
 			if (games.filter(it=>it.url==url).length) {
