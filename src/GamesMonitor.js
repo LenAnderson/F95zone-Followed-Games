@@ -58,7 +58,37 @@ export class GamesMonitor {
 			return 0;
 		});
 		this.filterBar.innerHTML = '';
-		this.games.forEach(game=>{
+		this.games.filter(game=>!game.title).forEach(game=>{
+			const item = document.createElement('div'); {
+				item.classList.add('structItem');
+				item.style.display = 'table-row';
+				const main = document.createElement('div'); {
+					main.classList.add('structItem-cell');
+					main.classList.add('structItem-cell--main');
+					main.textContent = 'GAME MISSING:  ' + game.cachedTitle;
+					const a = document.createElement('a'); {
+						a.textContent = game.url;
+						a.href = game.url;
+						a.style.display = 'block';
+						main.append(a);
+					}
+					item.append(main);
+				}
+				const meta = document.createElement('div'); {
+					meta.classList.add('structItem-cell');
+					meta.classList.add('structItem-cell--meta');
+					meta.style.width = '200px';
+					item.append(meta);
+				}
+				const downloads = document.createElement('div'); {
+					downloads.classList.add('structItem-cell');
+					downloads.classList.add('structItem-cell--meta');
+					item.append(downloads);
+				}
+				this.itemContainer.append(item);
+			}
+		});
+		this.games.filter(game=>game.title).forEach(game=>{
 			const item = document.createElement('div'); {
 				item.classList.add('structItem');
 				item.style.display = 'table-row';
