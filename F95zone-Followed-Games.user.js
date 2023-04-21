@@ -2,7 +2,7 @@
 // @name         F95zone - Followed Games
 // @namespace    https://github.com/LenAnderson/
 // @downloadURL  https://github.com/LenAnderson/F95zone-Followed-Games/raw/master/F95zone-Followed-Games.user.js
-// @version      1.7.0
+// @version      1.8.0
 // @author       LenAnderson
 // @match        https://f95zone.to/*
 // @grant        none
@@ -1601,7 +1601,7 @@ class GamesMonitor {
 			const app = new GamesMonitor();
 		} else if (location.href.search(/(https:\/\/f95zone.to\/threads\/)[^\/]+(\.\d+\/)/) == 0) {
 			log('add btn');
-			const watch = $('.rippleButton[data-sk-watch]');
+			const watch = $('[data-sk-watch]');
 			if (watch) {
 				log('yup');
 				const url = location.href.replace(/(https:\/\/f95zone.to\/threads\/)[^\/]+(\.\d+\/).*$/, '$1$2');
