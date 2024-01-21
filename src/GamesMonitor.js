@@ -65,12 +65,29 @@ export class GamesMonitor {
 				const main = document.createElement('div'); {
 					main.classList.add('structItem-cell');
 					main.classList.add('structItem-cell--main');
+					main.style.width = '100%';
 					main.textContent = 'GAME MISSING:  ' + game.cachedTitle;
 					const a = document.createElement('a'); {
 						a.textContent = game.url;
 						a.href = game.url;
 						a.style.display = 'block';
 						main.append(a);
+					}
+					const unfollow = document.createElement('button'); {
+						unfollow.classList.add('bbCodeSpoiler-button');
+						unfollow.classList.add('button');
+						unfollow.addEventListener('click', evt=>{
+							item.remove();
+							let games = JSON.parse(localStorage.getItem('ffg-games') || '[]');
+							games = games.filter(it=>it.url != game.url);
+							localStorage.setItem('ffg-games', JSON.stringify(games));
+						});
+						const span = document.createElement('span'); {
+							span.classList.add('button-text');
+							span.textContent = 'Unfollow';
+							unfollow.appendChild(span);
+						}
+						main.append(unfollow);
 					}
 					item.append(main);
 				}
@@ -98,6 +115,7 @@ export class GamesMonitor {
 				const main = document.createElement('div'); {
 					main.classList.add('structItem-cell');
 					main.classList.add('structItem-cell--main');
+					main.style.width = '100%';
 					const title = document.createElement('div'); {
 						title.classList.add('structItem-title');
 						title.appendChild(game.banner);
@@ -124,11 +142,28 @@ export class GamesMonitor {
 								played.appendChild(span);
 							}
 						}
+						const unfollow = document.createElement('button'); {
+							unfollow.classList.add('bbCodeSpoiler-button');
+							unfollow.classList.add('button');
+							unfollow.addEventListener('click', evt=>{
+								item.remove();
+								let games = JSON.parse(localStorage.getItem('ffg-games') || '[]');
+								games = games.filter(it=>it.url != game.url);
+								localStorage.setItem('ffg-games', JSON.stringify(games));
+							});
+							const span = document.createElement('span'); {
+								span.classList.add('button-text');
+								span.textContent = 'Unfollow';
+								unfollow.appendChild(span);
+							}
+						}
 						if (game.changelog) {
 							title.appendChild(game.changelog);
 							game.changelog.insertBefore(played, game.changelog.children[0]);
+							game.changelog.insertBefore(unfollow, game.changelog.children[1]);
 						} else {
 							title.appendChild(played);
+							title.appendChild(unfollow);
 						}
 						main.appendChild(title);
 					}
